@@ -233,6 +233,7 @@ class _Indicadores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ResultadoPeriodo? ultimo = this.ultimo;
     final ResultadoPeriodo? previo = vm.partida!.historial.length >= 2
         ? vm.partida!.historial[vm.partida!.historial.length - 2]
         : null;

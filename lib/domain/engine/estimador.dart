@@ -202,6 +202,7 @@ class MercadoEstimado {
         segmentos: segmentos,
         costoBase: real.costoBase,
         costoFijo: real.costoFijo,
+        utilidadReferencia: real.utilidadReferencia,
         cajaInicial: real.cajaInicial,
         limiteSobregiro: real.limiteSobregiro,
         periodos: real.periodos,
