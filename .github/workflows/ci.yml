@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: "3.24.5"
+
+jobs:
+  analisis-y-pruebas:
+    name: Análisis estático y pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get
+
+      # El formato se informa pero no bloquea: `dart format` reacomoda saltos
+      # de linea y no tiene sentido detener una entrega por eso.
+      - name: Formato
+        continue-on-error: true
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Análisis estático
+        run: flutter analyze --no-fatal-infos
+
+      - name: Pruebas
+        run: flutter test --reporter expanded
+
+  verificacion-del-motor:
+    name: Verificación del motor contra la calibración
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: El motor Dart entregado reproduce el prototipo calibrado
+        run: python3 tool/calibracion/comparar.py
+
+  apk:
+    name: Compilar APK
+    needs: [analisis-y-pruebas, verificacion-del-motor]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get
+
+      # El proyecto se versiona sin la carpeta android/: la genera Flutter para
+      # la version exacta del SDK que se esta usando. Asi el repositorio no
+      # arrastra un Gradle desactualizado.
+      - name: Generar el proyecto Android
+        run: flutter create --project-name marketing_strategy_lab --org pe.educacion --platforms=android .
+
+      - name: Icono de la aplicación
+        run: python3 tool/generar_icono.py android/app/src/main/res
+
+      - name: Nombre visible de la aplicación
+        run: |
+          sed -i 's/android:label="[^"]*"/android:label="Marketing Strategy Lab"/' \
+            android/app/src/main/AndroidManifest.xml
+
+      - name: Compilar APK de release
+        run: flutter build apk --release
+
+      - name: Publicar el APK como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketing-strategy-lab-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 30

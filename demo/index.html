@@ -1,0 +1,1052 @@
+<title>Marketing Strategy Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+
+<style>
+:root{
+  --papel:#EEF1F1;
+  --superficie:#FFFFFF;
+  --superficie-2:#E7ECEC;
+  --tinta:#12212A;
+  --tinta-2:#5C6F76;
+  --linea:#D3DBDB;
+  --teal:#0F4C5C;
+  --teal-claro:#2A7F92;
+  --naranja:#C9550E;
+  --verde:#1F7A63;
+  --ambar:#9A6A0B;
+  --rojo:#A31621;
+  --sombra:0 1px 2px rgba(18,33,42,.06);
+  --r:10px;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --texto:"Source Sans 3",system-ui,sans-serif;
+  --dato:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papel:#0D171C;
+    --superficie:#132329;
+    --superficie-2:#1B2F37;
+    --tinta:#E3ECEE;
+    --tinta-2:#8FA5AC;
+    --linea:#25404A;
+    --teal:#4FA3B8;
+    --teal-claro:#7FC4D4;
+    --naranja:#F0813C;
+    --verde:#4FBFA1;
+    --ambar:#D9A73C;
+    --rojo:#E8697A;
+    --sombra:0 1px 2px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#0D171C;
+  --superficie:#132329;
+  --superficie-2:#1B2F37;
+  --tinta:#E3ECEE;
+  --tinta-2:#8FA5AC;
+  --linea:#25404A;
+  --teal:#4FA3B8;
+  --teal-claro:#7FC4D4;
+  --naranja:#F0813C;
+  --verde:#4FBFA1;
+  --ambar:#D9A73C;
+  --rojo:#E8697A;
+  --sombra:0 1px 2px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--papel);color:var(--tinta);
+  font-family:var(--texto);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+button{font:inherit;color:inherit}
+.num{font-family:var(--dato);font-variant-numeric:tabular-nums}
+
+/* ---------- cabecera ---------- */
+.barra{
+  position:sticky;top:0;z-index:20;background:var(--teal);color:#fff;
+  padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+}
+:root[data-theme="dark"] .barra,
+:root:not([data-theme="light"]) .barra{color:#08161B}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .barra{color:#fff}}
+.barra .marca{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.02em}
+.barra .sub{font-size:12px;opacity:.85}
+.barra select{
+  font:inherit;font-size:13px;padding:5px 8px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:inherit;
+}
+.barra .crece{flex:1}
+.periodo{display:flex;gap:4px;align-items:center}
+.punto{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3)}
+.punto.hecho{background:var(--naranja)}
+.punto.ahora{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.btn{
+  border:none;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:700;
+  background:var(--naranja);color:#fff;font-size:14px;
+}
+.btn:hover{filter:brightness(1.07)}
+.btn.fantasma{background:rgba(255,255,255,.16);color:inherit;font-weight:600}
+.btn:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--naranja);outline-offset:2px}
+
+/* ---------- estructura ---------- */
+.tablero{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:16px;padding:16px;max-width:1240px;margin:0 auto;align-items:start;
+}
+@media (max-width:900px){.tablero{grid-template-columns:1fr}}
+.columna{display:flex;flex-direction:column;gap:12px;min-width:0}
+.bloque{
+  background:var(--superficie);border:1px solid var(--linea);
+  border-radius:var(--r);box-shadow:var(--sombra);
+}
+.bloque>.cabeza{
+  padding:12px 14px;display:flex;gap:10px;align-items:baseline;
+  border-bottom:1px solid var(--linea);
+}
+.bloque>.cuerpo{padding:14px}
+.cabeza h2{font-size:15px;font-weight:700}
+.cabeza .indice{
+  font-family:var(--dato);font-size:11px;font-weight:600;color:var(--naranja);
+  border:1px solid var(--naranja);border-radius:4px;padding:1px 5px;
+}
+.cabeza .estado{margin-left:auto;font-size:12px;color:var(--tinta-2);font-family:var(--dato)}
+details.bloque>summary{
+  padding:12px 14px;cursor:pointer;display:flex;gap:10px;align-items:baseline;
+  list-style:none;
+}
+details.bloque>summary::-webkit-details-marker{display:none}
+details.bloque[open]>summary{border-bottom:1px solid var(--linea)}
+summary h2{font-size:15px;font-weight:700}
+summary .estado{margin-left:auto;font-size:12px;color:var(--tinta-2);font-family:var(--dato)}
+summary::after{content:"▾";color:var(--tinta-2);font-size:12px}
+details[open]>summary::after{content:"▴"}
+
+/* ---------- controles ---------- */
+.campo{margin-bottom:16px}
+.campo:last-child{margin-bottom:0}
+.etiqueta{
+  font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--tinta-2);display:block;margin-bottom:6px;
+}
+.opciones{display:flex;flex-wrap:wrap;gap:6px}
+.opcion{
+  border:1px solid var(--linea);background:var(--superficie);border-radius:99px;
+  padding:5px 11px;font-size:13px;cursor:pointer;
+}
+.opcion[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+:root[data-theme="dark"] .opcion[aria-pressed="true"],
+:root:not([data-theme="light"]) .opcion[aria-pressed="true"]{color:#08161B}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .opcion[aria-pressed="true"]{color:#fff}}
+.opcion.canal{border-radius:8px;text-align:left;flex:1 1 150px}
+.opcion.canal small{display:block;font-size:11px;opacity:.75;font-family:var(--dato)}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.fila{display:flex;gap:10px;align-items:baseline;justify-content:space-between}
+.valor{font-family:var(--dato);font-weight:600;font-size:15px}
+
+/* ---------- segmentos ---------- */
+.segmento{
+  border:1px solid var(--linea);border-radius:9px;padding:11px;margin-bottom:8px;
+  background:var(--superficie);
+}
+.segmento.objetivo{border-color:var(--teal);border-width:2px;padding:10px}
+.segmento h3{font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}
+.segmento p{margin:4px 0 8px;font-size:13px;color:var(--tinta-2)}
+.marca-objetivo{
+  font-family:var(--dato);font-size:10px;letter-spacing:.06em;color:var(--teal);
+  border:1px solid var(--teal);border-radius:4px;padding:1px 5px;
+}
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:6px 14px}
+.dato{font-size:12px}
+.dato b{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--tinta-2);font-weight:700}
+.dato span{font-family:var(--dato);font-size:13px}
+.tol{color:var(--ambar);font-size:11px}
+.oculto{color:var(--tinta-2);font-style:italic;font-size:12.5px}
+.estudios{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.estudio{
+  border:1px dashed var(--linea);background:transparent;border-radius:7px;
+  padding:4px 9px;font-size:12px;cursor:pointer;font-family:var(--dato);
+}
+.estudio:hover:not(:disabled){border-color:var(--teal);border-style:solid}
+.estudio:disabled{opacity:.45;cursor:not-allowed}
+.estudio.comprado{border-style:solid;border-color:var(--verde);color:var(--verde)}
+
+/* ---------- indicadores ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--linea)}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--superficie);padding:12px 14px}
+.kpi b{display:block;font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--tinta-2);font-weight:700;margin-bottom:3px}
+.kpi .v{font-family:var(--dato);font-size:21px;font-weight:600;letter-spacing:-.02em}
+.kpi small{display:block;font-size:11px;color:var(--tinta-2);font-family:var(--dato)}
+.v.bien{color:var(--verde)} .v.mal{color:var(--rojo)}
+
+.barrita{height:6px;border-radius:3px;background:var(--superficie-2);overflow:hidden;margin-top:5px}
+.barrita i{display:block;height:100%;background:var(--teal-claro)}
+.barrita i.obj{background:var(--naranja)}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:right;padding:5px 4px;border-bottom:1px solid var(--linea)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2)}
+td.n{font-family:var(--dato);font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-bottom:none}
+.envoltura-tabla{overflow-x:auto}
+
+/* ---------- analista ---------- */
+.consejo{border-left:3px solid var(--tinta-2);padding:9px 0 9px 11px;margin-bottom:10px}
+.consejo:last-child{margin-bottom:0}
+.consejo.critica{border-color:var(--rojo)}
+.consejo.advertencia{border-color:var(--ambar)}
+.consejo.observacion{border-color:var(--teal-claro)}
+.consejo.confirmacion{border-color:var(--verde)}
+.consejo .sello{
+  font-family:var(--dato);font-size:10px;letter-spacing:.07em;font-weight:600;
+}
+.critica .sello{color:var(--rojo)} .advertencia .sello{color:var(--ambar)}
+.observacion .sello{color:var(--teal-claro)} .confirmacion .sello{color:var(--verde)}
+.consejo h4{margin:2px 0 3px;font-size:13.5px;font-family:var(--display);font-weight:700}
+.consejo p{margin:0;font-size:13px;color:var(--tinta-2)}
+.consejo .porque{margin-top:5px;font-size:12.5px;color:var(--tinta-2);font-style:italic}
+
+.aviso{
+  background:var(--superficie-2);border-radius:8px;padding:10px 12px;font-size:12.5px;
+  color:var(--tinta-2);
+}
+.aviso b{color:var(--tinta)}
+.nota-pie{font-size:12px;color:var(--tinta-2);padding:0 16px 28px;max-width:1240px;margin:0 auto}
+.nota-pie a{color:var(--teal-claro)}
+
+.evento{border-left:3px solid var(--ambar);background:var(--superficie-2);
+  padding:9px 11px;border-radius:0 8px 8px 0;font-size:13px;margin-bottom:8px}
+.evento b{display:block;font-size:12px;letter-spacing:.02em}
+
+.cierre{padding:14px;display:grid;gap:10px}
+.competencia{display:grid;gap:4px}
+.competencia .fila{align-items:center}
+.competencia .puntaje{font-family:var(--dato);font-weight:600;font-size:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="barra">
+  <div>
+    <div class="marca">Marketing Strategy Lab</div>
+    <div class="sub" id="subtitulo">Simulador de decisiones comerciales</div>
+  </div>
+  <div class="crece"></div>
+  <select id="selMercado" aria-label="Escenario"></select>
+  <div class="periodo" id="puntos" aria-label="Avance de periodos"></div>
+  <button class="btn fantasma" id="btnReiniciar" type="button">Reiniciar</button>
+  <button class="btn" id="btnCerrar" type="button">Cerrar periodo</button>
+</header>
+
+<main class="tablero">
+  <div class="columna">
+    <details class="bloque" id="briefing" open>
+      <summary><h2>El encargo</h2><span class="estado" id="estadoBrief"></span></summary>
+      <div class="cuerpo">
+        <p id="contexto" style="margin:0 0 10px;font-size:13.5px"></p>
+        <div id="eventos"></div>
+        <div class="aviso">Solo conoces lo que ves aquí. El tamaño de cada segmento,
+        lo que busca y cuánto paga se <b>investiga</b>, cuesta dinero y viene con
+        error de muestreo.</div>
+      </div>
+    </details>
+
+    <details class="bloque" open>
+      <summary><span class="indice">1</span><h2>Mercado</h2>
+        <span class="estado" id="estadoMercado"></span></summary>
+      <div class="cuerpo" id="panelSegmentos"></div>
+    </details>
+
+    <details class="bloque" open>
+      <summary><span class="indice">2</span><h2>Cliente</h2>
+        <span class="estado" id="estadoCliente"></span></summary>
+      <div class="cuerpo">
+        <div class="campo">
+          <span class="etiqueta">Beneficio que prometes</span>
+          <div class="opciones" id="opBeneficio"></div>
+        </div>
+        <div class="campo">
+          <div class="fila"><span class="etiqueta" style="margin:0">Nivel de la promesa</span>
+            <span class="valor" id="vNivel"></span></div>
+          <input type="range" id="rNivel" min="1" max="5" step="0.5">
+          <p style="margin:6px 0 0;font-size:12.5px;color:var(--tinta-2)" id="txtNivel"></p>
+        </div>
+        <div id="avisoPromesa"></div>
+      </div>
+    </details>
+
+    <details class="bloque" open>
+      <summary><span class="indice">3</span><h2>Producto</h2>
+        <span class="estado" id="estadoProducto"></span></summary>
+      <div class="cuerpo">
+        <div class="campo">
+          <div class="fila"><span class="etiqueta" style="margin:0">Calidad</span>
+            <span class="valor" id="vCalidad"></span></div>
+          <input type="range" id="rCalidad" min="1" max="5" step="0.5">
+        </div>
+        <div class="campo">
+          <span class="etiqueta">Beneficio que el producto entrega</span>
+          <div class="opciones" id="opReal"></div>
+        </div>
+        <div class="campo">
+          <span class="etiqueta">Amplitud de línea</span>
+          <div class="opciones" id="opAmplitud"></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="bloque" open>
+      <summary><span class="indice">4</span><h2>Precio</h2>
+        <span class="estado" id="estadoPrecio"></span></summary>
+      <div class="cuerpo">
+        <div class="campo">
+          <div class="fila"><span class="etiqueta" style="margin:0">Precio al público</span>
+            <span class="valor" id="vPrecio"></span></div>
+          <input type="range" id="rPrecio" min="0" max="100" step="0.1">
+        </div>
+        <div class="envoltura-tabla"><table id="tablaPrecio"></table></div>
+      </div>
+    </details>
+
+    <details class="bloque" open>
+      <summary><span class="indice">5</span><h2>Campañas</h2>
+        <span class="estado" id="estadoCampanas"></span></summary>
+      <div class="cuerpo">
+        <div class="campo">
+          <span class="etiqueta">Inversión por medio</span>
+          <div id="medios"></div>
+        </div>
+        <div class="campo">
+          <span class="etiqueta">Canales de venta</span>
+          <div class="opciones" id="opCanales"></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="columna">
+    <div class="bloque">
+      <div class="kpis" id="kpis"></div>
+    </div>
+
+    <div class="bloque">
+      <div class="cabeza"><h2>Analista de marketing</h2>
+        <span class="estado">30 reglas · sin IA generativa</span></div>
+      <div class="cuerpo">
+        <div class="aviso" style="margin-bottom:12px">
+          Proyecta con <b>tus</b> estimaciones, no con los datos reales del mercado:
+          responde a «qué pasaría si lo que crees fuera cierto».
+        </div>
+        <div id="proyeccion"></div>
+        <div id="consejos" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <div class="bloque" id="bloqueResultado">
+      <div class="cabeza"><h2>Último periodo cerrado</h2>
+        <span class="estado" id="estadoResultado"></span></div>
+      <div class="cuerpo" id="resultado"></div>
+    </div>
+
+    <div class="bloque" id="bloqueCierre" hidden>
+      <div class="cabeza"><h2>Informe de cierre</h2></div>
+      <div class="cierre" id="cierre"></div>
+    </div>
+  </div>
+</main>
+
+<p class="nota-pie">
+  Demostración web del motor de <strong>Marketing Strategy Lab</strong>. Corre el
+  mismo modelo que la aplicación Flutter, con los mismos parámetros calibrados:
+  elección discreta por segmento, recuerdo de marca con saturación y boca a boca,
+  satisfacción como entrega menos expectativa, y reputación asimétrica. La app
+  entregada agrega persistencia, el informe completo por competencias, historial
+  gráfico y las 30 reglas del analista; aquí hay 12.
+</p>
+
+<script>
+/* ====================== PARÁMETROS (idénticos a parametros.dart) ========= */
+const P = {
+  lambda:3.0, noCompra:0.95, kMedios:55000, decAw:0.15, techoAw:0.92, pisoAw:0.02,
+  techoCob:0.95, inercia:0.30, impuesto:0.295, factExp:0.965, pisoExp:0.80,
+  volExp:1000, pesoRep:1.30, caidaRep:0.42, subidaRep:0.22, umbralBoca:0.45,
+  castigoBoca:0.55, premioBoca:0.30, umbralBocaAlto:0.72, decMax:0.70,
+  pisoSat:0.03, techoSat:0.97, baseSat:0.62, pendSat:1.30, pisoRep:0.05,
+  techoRep:0.95, recCla:0.30, castigoCambio:0.55, techoCla:0.95, invCla:60000,
+  umbralSospecha:0.72, pesoSospecha:3.0, cBase:0.55, cCalidad:0.18, cAmplitud:0.05,
+  pCalEnt:0.55, pBenEnt:0.45, pPrecioExp:0.15, pExig:0.03, pisoSim:0.18,
+};
+const SIM = {
+  'salud|rendimiento':0.60,'salud|energia':0.45,'energia|rendimiento':0.55,
+  'estatus|salud':0.30,'estatus|rendimiento':0.30,'precio|flexibilidad':0.35,
+  'flexibilidad|rendimiento':0.30,'energia|flexibilidad':0.25,
+};
+const MEDIOS = {
+  tv:{n:'Televisión',ef:0.85,min:40000},
+  radio:{n:'Radio',ef:1.05,min:8000},
+  digital:{n:'Digital y redes',ef:1.20,min:3000},
+  influencers:{n:'Influencers',ef:1.10,min:5000},
+  punto_venta:{n:'Punto de venta',ef:0.95,min:4000},
+};
+const CANALES = {
+  retail:{n:'Retail moderno',fijo:38000,margen:0.28},
+  bodegas:{n:'Bodegas',fijo:22000,margen:0.18},
+  marketplace:{n:'Marketplace',fijo:9000,margen:0.20},
+  propio:{n:'Canal propio',fijo:16000,margen:0.06},
+  mayorista:{n:'Mayorista',fijo:12000,margen:0.32},
+};
+const BENEFICIOS = {
+  salud:'Salud y bienestar', energia:'Energía inmediata', precio:'Precio accesible',
+  estatus:'Imagen y estatus', rendimiento:'Desempeño y resultados',
+  flexibilidad:'Flexibilidad y conveniencia',
+};
+const ESTUDIOS = {
+  tamano:{n:'Tamaño de mercado',costo:12000,err:0.20,porSeg:false},
+  perfil:{n:'Perfil',costo:18000,err:0.16,porSeg:true},
+  precio:{n:'Prueba de precio',costo:15000,err:0.14,porSeg:true},
+  canales:{n:'Canales',costo:14000,err:0.18,porSeg:true},
+  medios:{n:'Medios',costo:10000,err:0.18,porSeg:true},
+  mystery:{n:'Mystery shopper',costo:16000,err:0.12,porSeg:false},
+};
+
+const similitud=(a,b)=> a===b?1: (SIM[a+'|'+b] ?? SIM[b+'|'+a] ?? P.pisoSim);
+const lim=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ====================== MOTOR (idéntico a motor_simulacion.dart) ========= */
+function costoUnitario(m,em,d,acum){
+  let base=m.costoBase*em.factorCosto*(P.cBase+P.cCalidad*d.calidad);
+  base*=1+P.cAmplitud*(d.amplitud-1);
+  let f=1;
+  if(acum>P.volExp) f=Math.max(P.pisoExp,Math.pow(P.factExp,Math.log(acum/P.volExp)/Math.log(2)));
+  return base*f;
+}
+function cobertura(s,canales){
+  let libre=1; canales.forEach(c=>libre*=1-(s.canales[c]??0));
+  return Math.min(P.techoCob,1-libre);
+}
+function margenCanal(s,canales){
+  let peso=0,ac=0;
+  canales.forEach(c=>{const a=s.canales[c]??0;peso+=a;ac+=a*CANALES[c].margen;});
+  return peso<=0?0:ac/peso;
+}
+function nuevaAwareness(s,aw,medios,satPrev){
+  let ef=0;
+  for(const k in medios){
+    const monto=medios[k]; if(!monto||monto<=0) continue;
+    const M=MEDIOS[k];
+    const pen=monto>=M.min?1:0.45+0.55*(monto/M.min);
+    ef+=monto*M.ef*(s.medios[k]??0)*pen;
+  }
+  let gan=ef>0?(P.techoAw-aw)*(ef/(ef+P.kMedios)):0;
+  let dec=P.decAw;
+  if(satPrev<P.umbralBoca) dec+=P.castigoBoca*(P.umbralBoca-satPrev);
+  else if(satPrev>P.umbralBocaAlto) gan+=(P.techoAw-aw)*P.premioBoca*(satPrev-P.umbralBocaAlto);
+  dec=Math.min(P.decMax,dec);
+  return lim(aw*(1-dec)+gan,P.pisoAw,P.techoAw);
+}
+function atractivo(s,d,e){
+  const fit=similitud(d.promesa,s.beneficio);
+  const cre=Math.min(1,(d.nivel/5)*(0.45+0.55*e.cla)+(d.calidad/5)*(0.55*e.cla));
+  let v=s.pesoCalidad*cre+s.pesoBeneficio*fit+s.pesoMarca*(e.cla*fit)+s.pesoVariedad*(d.amplitud/3);
+  v*=1+P.pesoRep*(e.rep-0.5);
+  return Math.max(0.01,v);
+}
+function utilidad(s,d,e){
+  const rel=d.precio/s.precioRef;
+  let u=P.lambda*atractivo(s,d,e)-s.sensibilidad*(rel-1);
+  if(rel<P.umbralSospecha) u-=s.sospecha*(P.umbralSospecha-rel)*P.pesoSospecha;
+  return u;
+}
+function satisfaccion(s,d){
+  const entregado=P.pCalEnt*(d.calidad/5)+P.pBenEnt*similitud(d.real,s.beneficio);
+  let esperado=P.pCalEnt*(d.nivel/5)+P.pBenEnt*similitud(d.promesa,s.beneficio);
+  esperado*=1+P.pPrecioExp*(d.precio/s.precioRef-1);
+  esperado*=0.94+P.pExig*(s.exigencia-3);
+  return lim(P.baseSat+P.pendSat*(entregado-esperado),P.pisoSat,P.techoSat);
+}
+function simular(m,em,d,estado,comps,cajaPrevia){
+  const marcas=[{id:'jugador',d,e:estado},...comps.map(c=>({id:c.id,d:c.d,e:c.estado}))];
+  m.segmentos.forEach(s=>marcas.forEach(x=>{
+    x.e.aw[s.id]=nuevaAwareness(s,x.e.aw[s.id]??0.05,x.d.medios,x.e.satPrev??0.55);
+  }));
+  const ventas={}; marcas.forEach(x=>ventas[x.id]=0);
+  let ingresos=0,satPond=0; const detalle=[];
+  m.segmentos.forEach(s=>{
+    const pesos={};
+    marcas.forEach(x=>{
+      const cob=cobertura(s,x.d.canales), aw=x.e.aw[s.id]??0;
+      pesos[x.id]=(cob<=0||aw<=0)?0:cob*aw*Math.exp(utilidad(s,x.d,x.e));
+    });
+    let total=Math.exp(P.noCompra);
+    for(const k in pesos) total+=pesos[k];
+    const part={}; const inercia=P.inercia*s.lealtad;
+    marcas.forEach(x=>{
+      let sh=pesos[x.id]/total;
+      const prev=x.e.partPrev[s.id];
+      if(prev!==undefined) sh=(1-inercia)*sh+inercia*prev;
+      part[x.id]=sh;
+    });
+    marcas.forEach(x=>x.e.partPrev[s.id]=part[x.id]);
+    const tam=s.tamano*(em.factorTamano[s.id]??1);
+    marcas.forEach(x=>{
+      const u=tam*part[x.id]; ventas[x.id]+=u;
+      if(x.id!=='jugador') return;
+      const ing=u*x.d.precio*(1-margenCanal(s,x.d.canales));
+      ingresos+=ing;
+      const sat=satisfaccion(s,x.d); satPond+=sat*u;
+      detalle.push({seg:s.id,unidades:u,part:part[x.id],sat,
+        aw:x.e.aw[s.id],cob:cobertura(s,x.d.canales),ingreso:ing});
+    });
+  });
+  const unidades=ventas.jugador;
+  const satGlobal=unidades>0?satPond/unidades:0.5;
+  const cu=costoUnitario(m,em,d,estado.acum);
+  const costoVar=unidades*cu;
+  const costoCanales=[...d.canales].reduce((a,c)=>a+CANALES[c].fijo,0);
+  const gastoMedios=Object.values(d.medios).reduce((a,b)=>a+b,0);
+  const costos=costoVar+m.costoFijo+costoCanales+gastoMedios+(d.investigacion??0);
+  const bruta=ingresos-costos;
+  const impuesto=bruta>0?bruta*P.impuesto:0;
+  const neta=bruta-impuesto;
+  const vel=satGlobal<estado.rep?P.caidaRep:P.subidaRep;
+  estado.rep=lim(estado.rep*(1-vel)+vel*satGlobal,P.pisoRep,P.techoRep);
+  estado.satPrev=satGlobal;
+  const firma=`${d.objetivo}|${d.promesa}|${Math.round(d.nivel)}`;
+  if(estado.pos && estado.pos!==firma) estado.cla*=P.castigoCambio;
+  else estado.cla=Math.min(P.techoCla,estado.cla+(P.techoCla-estado.cla)*P.recCla*Math.min(1,gastoMedios/P.invCla));
+  estado.pos=firma; estado.acum+=unidades;
+  let totalMercado=0; for(const k in ventas) totalMercado+=ventas[k];
+  const participacion=totalMercado>0?unidades/totalMercado:0;
+  comps.forEach(c=>{
+    const base=m.costoBase*em.factorCosto;
+    if(c.politica==='lider_masivo'&&participacion>0.22){
+      for(const k in c.d.medios) c.d.medios[k]*=1.06;
+      c.d.precio=Math.max(base*1.35,c.d.precio*0.96);
+    } else if(c.politica==='premium'&&participacion>0.18){
+      c.d.medios.digital=(c.d.medios.digital??0)*1.08+2000;
+      c.d.calidad=Math.min(5,c.d.calidad+0.15);
+    } else if(c.politica==='retador'){
+      c.d.precio = d.precio<c.d.precio ? Math.max(base*1.25,c.d.precio*0.97) : c.d.precio*1.01;
+    }
+    c.estado.acum+=ventas[c.id];
+    c.estado.rep=lim(c.estado.rep*0.9+0.1*0.55,P.pisoRep,P.techoRep);
+    c.estado.cla=Math.min(0.90,c.estado.cla+0.05);
+  });
+  return {unidades,ingresos,cu,costoVar,costoCanales,gastoMedios,
+    investigacion:d.investigacion??0,costoFijo:m.costoFijo,impuesto,utilidad:neta,
+    sat:satGlobal,participacion,rep:estado.rep,cla:estado.cla,
+    caja:cajaPrevia+neta,detalle,ventas};
+}
+
+/* ====================== INVESTIGACIÓN (ruido determinista) ============== */
+function hash(t){let h=7;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))&0x7FFFFFFF;return h;}
+function rng(semilla){let e=(semilla&0x7FFFFFFF)|1;return()=>{e=(e*1103515245+12345)&0x7FFFFFFF;return e/0x7FFFFFFF;};}
+function normal(r){const c=()=>r()*2-1;return (c()+c()+c())/3;}
+function investigar(estudioId,segId){
+  const E=ESTUDIOS[estudioId];
+  const r=rng(hash(`${J.mercado.id}|${estudioId}|${segId}|1`));
+  const ruido=v=>Math.max(0,v*(1+normal(r)*E.err));
+  const datos={};
+  const s=J.mercado.segmentos.find(x=>x.id===segId);
+  if(estudioId==='tamano') J.mercado.segmentos.forEach(x=>datos['tamano:'+x.id]=ruido(x.tamano));
+  if(estudioId==='perfil'&&s){
+    datos.pesoCalidad=ruido(s.pesoCalidad); datos.pesoBeneficio=ruido(s.pesoBeneficio);
+    datos.pesoMarca=ruido(s.pesoMarca); datos.pesoVariedad=ruido(s.pesoVariedad);
+    datos.exigencia=ruido(s.exigencia); datos.lealtad=ruido(s.lealtad);
+    datos.beneficio=s.beneficio;
+  }
+  if(estudioId==='precio'&&s){
+    datos.precioRef=ruido(s.precioRef); datos.sensibilidad=ruido(s.sensibilidad);
+    datos.sospecha=ruido(s.sospecha);
+  }
+  if(estudioId==='canales'&&s) for(const c in CANALES) datos['canal:'+c]=ruido(s.canales[c]??0);
+  if(estudioId==='medios'&&s) for(const md in MEDIOS) datos['medio:'+md]=ruido(s.medios[md]??0);
+  if(estudioId==='mystery') J.mercado.competidores.forEach(c=>{
+    datos['precio:'+c.id]=ruido(c.d.precio); datos['calidad:'+c.id]=ruido(c.d.calidad);
+    datos['promesa:'+c.id]=c.d.promesa;
+  });
+  return {estudioId,segId,error:E.err,datos};
+}
+const conoce=(e,s='')=>J.hallazgos.some(h=>h.estudioId===e&&h.segId===s);
+const hallazgo=(e,s='')=>J.hallazgos.find(h=>h.estudioId===e&&h.segId===s);
+
+/* ====================== MERCADO ESTIMADO (frontera de honestidad) ======= */
+function mercadoEstimado(){
+  const supuestos=[];
+  const t=hallazgo('tamano');
+  if(!t) supuestos.push('Sin estudio de tamaño: se supone que los segmentos son iguales.');
+  const neutro=J.mercado.declarado/J.mercado.segmentos.length;
+  const segmentos=J.mercado.segmentos.map(s=>{
+    const per=hallazgo('perfil',s.id), pre=hallazgo('precio',s.id);
+    const can=hallazgo('canales',s.id), med=hallazgo('medios',s.id);
+    if(!per) supuestos.push(`Sin perfil de ${s.nombre}: se supone que busca lo que tú prometes.`);
+    if(!pre) supuestos.push(`Sin prueba de precio en ${s.nombre}: se supone que tu precio es la referencia.`);
+    const medios={},canales={};
+    for(const k in MEDIOS) medios[k]=med?med.datos['medio:'+k]:0.30;
+    for(const k in CANALES) canales[k]=can?can.datos['canal:'+k]:0.30;
+    return {id:s.id,nombre:s.nombre,
+      tamano:t?t.datos['tamano:'+s.id]:neutro,
+      precioRef:pre?pre.datos.precioRef:J.d.precio,
+      sensibilidad:pre?pre.datos.sensibilidad:3.0,
+      sospecha:pre?pre.datos.sospecha:1.0,
+      pesoCalidad:per?per.datos.pesoCalidad:0.25,
+      pesoBeneficio:per?per.datos.pesoBeneficio:0.25,
+      pesoMarca:per?per.datos.pesoMarca:0.25,
+      pesoVariedad:per?per.datos.pesoVariedad:0.25,
+      beneficio:per?per.datos.beneficio:J.d.promesa,
+      exigencia:per?per.datos.exigencia:3.0,
+      lealtad:per?per.datos.lealtad:0.40,
+      medios,canales};
+  });
+  const my=hallazgo('mystery');
+  if(!my) supuestos.push('Sin mystery shopper: se supone que los rivales venden a tu precio.');
+  const competidores=J.comps.map(c=>({
+    id:c.id,nombre:c.nombre,politica:c.politica,
+    d:{precio:my?my.datos['precio:'+c.id]:J.d.precio,
+       calidad:my?my.datos['calidad:'+c.id]:3.0,
+       promesa:my?my.datos['promesa:'+c.id]:'precio',
+       real:my?my.datos['promesa:'+c.id]:'precio',
+       nivel:3,amplitud:2,
+       canales:my?[...c.d.canales]:[...J.d.canales],
+       medios:my?{...c.d.medios}:{...J.d.medios}},
+    estado:{aw:Object.fromEntries(J.mercado.segmentos.map(s=>[s.id,0.45])),
+            rep:0.55,cla:0.60,partPrev:{},acum:0,satPrev:0.55,pos:''},
+  }));
+  return {supuestos,mercado:{...J.mercado,segmentos,competidores}};
+}
+function proyectar(){
+  const est=mercadoEstimado();
+  const estado={aw:{...J.estado.aw},rep:J.estado.rep,cla:J.estado.cla,
+    satPrev:J.estado.satPrev,partPrev:{...J.estado.partPrev},acum:J.estado.acum,pos:J.estado.pos};
+  const comps=est.mercado.competidores.map(c=>({...c,d:{...c.d,medios:{...c.d.medios}},
+    estado:{...c.estado,aw:{...c.estado.aw},partPrev:{}}}));
+  const em={factorCosto:J.em.factorCosto,factorTamano:{...J.em.factorTamano}};
+  return {r:simular(est.mercado,em,J.d,estado,comps,J.caja),supuestos:est.supuestos,est};
+}
+
+/* ====================== ANALISTA (12 de las 30 reglas) ================== */
+function analizar(proy){
+  const c=[],d=J.d,est=proy.est.mercado;
+  const obj=est.segmentos.find(s=>s.id===d.objetivo);
+  const agregar=(sev,regla,titulo,mensaje,porque)=>c.push({sev,regla,titulo,mensaje,porque});
+  const sol=v=>'S/ '+Math.round(v).toLocaleString('es-PE');
+
+  if(obj&&!conoce('perfil',obj.id))
+    agregar('critica','R01','Estás decidiendo a ciegas sobre tu objetivo',
+      `Elegiste ${obj.nombre} sin contratar su perfil: no sabes qué beneficio busca.`,
+      'Toda la mezcla se deduce del perfil del objetivo. Sin él son suposiciones, no decisiones.');
+  if(obj&&!conoce('precio',obj.id))
+    agregar('advertencia','R02','Precio fijado sin prueba de precio',
+      `Pusiste S/ ${d.precio.toFixed(2)} sin saber qué considera normal tu objetivo.`,
+      'El precio se juzga contra la referencia del segmento, no en soles absolutos.');
+  if(obj&&d.canales.size>=3&&!conoce('canales',obj.id))
+    agregar('advertencia','R03',`Pagas ${d.canales.size} canales sin saber dónde compra tu objetivo`,
+      `Cuestan ${sol([...d.canales].reduce((a,x)=>a+CANALES[x].fijo,0))} por periodo, se venda o no.`,
+      'La cobertura no suma: dos canales que llegan al mismo público solo duplican el costo fijo.');
+  if(!conoce('tamano'))
+    agregar('observacion','R05','No sabes cuánta gente hay en cada segmento',
+      `Sin el estudio de tamaño no puedes saber si tu objetivo cubre ${sol(J.mercado.costoFijo)} de costo fijo.`,
+      'Un segmento con el perfil perfecto puede ser demasiado chico para tu estructura.');
+  if(J.estado.pos && J.estado.pos!==`${d.objetivo}|${d.promesa}|${Math.round(d.nivel)}`)
+    agregar('advertencia','R12','Estás cambiando de posicionamiento',
+      'Cambiar de objetivo, beneficio o nivel reduce a poco más de la mitad la claridad construida.',
+      'La claridad se acumula por repetición y se pierde en un periodo.');
+  if(d.nivel-d.calidad>=1)
+    agregar('critica','R13','Prometes más de lo que entregas',
+      `Promesa ${d.nivel.toFixed(1)} contra calidad ${d.calidad.toFixed(1)}: la diferencia la paga el cliente.`,
+      'La satisfacción es entrega menos expectativa; la insatisfacción destruye reputación y acelera el olvido.');
+  if(d.calidad-d.nivel>=1.2)
+    agregar('observacion','R14','Entregas más de lo que comunicas',
+      'Pagas calidad en el costo unitario y no la cobras en precio ni en atractivo.',
+      'La calidad que el cliente no percibe es costo puro.');
+  if(d.real!==d.promesa)
+    agregar('critica','R15','Tu producto no entrega lo que tu campaña promete',
+      `Prometes ${BENEFICIOS[d.promesa].toLowerCase()} y entregas ${BENEFICIOS[d.real].toLowerCase()}.`,
+      'La promesa atrae y el producto retiene. Si no coinciden, cada sol de publicidad compra un cliente decepcionado.');
+  if(obj&&conoce('perfil',obj.id)){
+    if(obj.beneficio!==d.promesa)
+      agregar('critica','R16','Le prometes a tu objetivo algo que no busca',
+        `${obj.nombre} busca ${BENEFICIOS[obj.beneficio].toLowerCase()} y tú comunicas ${BENEFICIOS[d.promesa].toLowerCase()}.`,
+        'Fuera de esa intersección, la inversión publicitaria trabaja en contra.');
+    else if(d.real===d.promesa&&Math.abs(d.nivel-d.calidad)<1)
+      agregar('confirmacion','R30','Promesa, producto y objetivo están alineados',
+        `Le prometes a ${obj.nombre} exactamente lo que busca y el producto lo respalda.`,
+        'Esta coherencia es la que construye reputación y claridad periodo tras periodo.');
+  }
+  const margen=obj?margenCanal(obj,d.canales):0.2;
+  const cu=costoUnitario(J.mercado,J.em,d,J.estado.acum);
+  if(d.precio*(1-margen)<=cu)
+    agregar('critica','R19','Vendes por debajo del costo',
+      `Recibes S/ ${(d.precio*(1-margen)).toFixed(2)} por unidad y producirla cuesta S/ ${cu.toFixed(2)}.`,
+      'Con contribución negativa, cada unidad vendida aumenta la pérdida.');
+  if(obj&&conoce('medios',obj.id))
+    for(const k in MEDIOS)
+      if((d.medios[k]??0)>0&&(obj.medios[k]??0)<0.15)
+        agregar('advertencia','R23',`${sol(d.medios[k])} en un medio que tu objetivo no consume`,
+          `${MEDIOS[k].n} tiene afinidad estimada de ${Math.round((obj.medios[k]??0)*100)}% con ${obj.nombre}.`,
+          'El alcance es inversión × eficiencia × afinidad. Con afinidad baja el producto es casi cero.');
+  if(d.canales.size===0)
+    agregar('critica','R26','No tienes dónde vender',
+      'Sin canales la cobertura es cero y no habrá ventas.',
+      'La disponibilidad multiplica a todo lo demás.');
+  if(proy.r.caja<0)
+    agregar('critica','R29','La proyección te deja en números rojos',
+      `Con tus estimaciones el periodo cerraría con ${sol(proy.r.caja)} en caja.`,
+      `El límite de sobregiro de este mercado es ${sol(J.mercado.limiteSobregiro)}.`);
+  const orden={critica:0,advertencia:1,observacion:2,confirmacion:3};
+  return c.sort((a,b)=>orden[a.sev]-orden[b.sev]);
+}
+
+/* ====================== ESTADO DE LA PARTIDA ============================ */
+const MERCADOS = {"bebida":{"id":"bebida","nombre":"Bebida funcional embotellada","categoria":"Consumo masivo","unidad":"botella","declarado":2000000.0,"contexto":"Vas a dirigir una marca nueva de bebida funcional embotellada en el mercado peruano. La categoría mueve alrededor de dos millones de botellas por trimestre y ya tiene dos marcas instaladas: Selva Pura, líder en volumen, con precio bajo y presencia en bodegas de todo el país, y VitalPlus, una marca intermedia. Tienes ocho trimestres y una caja inicial de S/ 600,000. Nadie te va a decir quién compra qué: eso lo averiguas tú.","leccion":"En una categoría donde el líder ya domina el segmento masivo con una estructura de costos que no puedes igualar, pelear por volumen es jugar su partido. Los segmentos de alto valor (deportistas y jóvenes que compran imagen) son pequeños, pero pagan más del doble por botella y no le interesan al líder. La estrategia que más utilidad genera aquí es enfocarse en uno de ellos y ser reconocible; la que menos, tratar de gustarle a todos.","costoBase":1.55,"costoFijo":90000.0,"cajaInicial":600000.0,"limiteSobregiro":350000.0,"periodos":8,"referencia":5300000.0,"segmentos":[{"id":"fitness","nombre":"Deportista urbano","descripcion":"Entrena de tres a seis veces por semana, lee etiquetas y compara fórmulas. Compra en tienda especializada, retail moderno y en línea. Paga más si cree que el producto funciona.","tamano":260000,"precioRef":6.8,"sensibilidad":1.5,"pesoCalidad":0.4,"pesoBeneficio":0.34,"pesoMarca":0.18,"pesoVariedad":0.08,"beneficio":"rendimiento","exigencia":4.3,"lealtad":0.55,"sospecha":1.6,"medios":{"tv":0.1,"radio":0.08,"digital":0.55,"influencers":0.6,"punto_venta":0.25},"canales":{"retail":0.55,"propio":0.45,"marketplace":0.4,"bodegas":0.12,"mayorista":0.05}},{"id":"oficina","nombre":"Oficinista apurado","descripcion":"Compra rápido y cerca del trabajo. Busca algo que lo mantenga despierto en la tarde. Decide frente a la refrigeradora, no en casa.","tamano":520000,"precioRef":5.0,"sensibilidad":2.6,"pesoCalidad":0.26,"pesoBeneficio":0.34,"pesoMarca":0.22,"pesoVariedad":0.18,"beneficio":"energia","exigencia":3.2,"lealtad":0.4,"sospecha":0.5,"medios":{"tv":0.25,"radio":0.35,"digital":0.4,"influencers":0.15,"punto_venta":0.45},"canales":{"retail":0.5,"bodegas":0.55,"marketplace":0.15,"propio":0.1,"mayorista":0.2}},{"id":"familia","nombre":"Familia ahorradora","descripcion":"Compra para varios, en cantidad, en bodega o mayorista. Mira el precio por unidad y el tamaño del envase antes que cualquier otra cosa.","tamano":900000,"precioRef":3.3,"sensibilidad":4.6,"pesoCalidad":0.18,"pesoBeneficio":0.24,"pesoMarca":0.2,"pesoVariedad":0.38,"beneficio":"precio","exigencia":2.4,"lealtad":0.35,"sospecha":0.0,"medios":{"tv":0.5,"radio":0.45,"digital":0.15,"influencers":0.05,"punto_venta":0.35},"canales":{"bodegas":0.62,"mayorista":0.5,"retail":0.3,"marketplace":0.05,"propio":0.03}},{"id":"joven","nombre":"Joven que busca imagen","descripcion":"Entre 18 y 26 años. La marca importa tanto como el producto: es algo que se muestra. Descubre marcas en redes y por recomendación de la gente que sigue.","tamano":280000,"precioRef":7.2,"sensibilidad":1.2,"pesoCalidad":0.22,"pesoBeneficio":0.26,"pesoMarca":0.44,"pesoVariedad":0.08,"beneficio":"estatus","exigencia":3.6,"lealtad":0.45,"sospecha":2.2,"medios":{"tv":0.12,"radio":0.05,"digital":0.55,"influencers":0.7,"punto_venta":0.15},"canales":{"retail":0.45,"marketplace":0.45,"propio":0.4,"bodegas":0.2,"mayorista":0.03}}],"competidores":[{"id":"selva","nombre":"Selva Pura","politica":"lider_masivo","d":{"precio":3.0,"calidad":2.2,"promesa":"precio","nivel":2.0,"real":"precio","amplitud":3,"canales":["bodegas","mayorista","retail"],"medios":{"tv":55000,"radio":30000,"punto_venta":20000}},"estado":{"aw":{"fitness":0.42,"oficina":0.42,"familia":0.42,"joven":0.42},"rep":0.55,"cla":0.7}},{"id":"vital","nombre":"VitalPlus","politica":"retador","d":{"precio":5.2,"calidad":3.2,"promesa":"energia","nivel":3.0,"real":"energia","amplitud":2,"canales":["retail","bodegas"],"medios":{"radio":14000,"digital":22000,"punto_venta":12000}},"estado":{"aw":{"fitness":0.3,"oficina":0.3,"familia":0.3,"joven":0.3},"rep":0.52,"cla":0.55}}],"eventos":[{"periodo":2,"titulo":"Sube el precio del insumo importado","descripcion":"El concentrado de fruta sube 12%. El costo unitario aumenta para todas las marcas de la categoría.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.12,"segmento":"","ft":1.0},{"periodo":3,"titulo":"VitalPlus contraataca","descripcion":"VitalPlus baja su precio 8% y sube su inversión en medios 25%.","competidor":"vital","cp":0.92,"cm":1.25,"ck":0.0,"fc":1.0,"segmento":"","ft":1.0},{"periodo":5,"titulo":"Ola de consumo saludable","descripcion":"El segmento Deportista urbano crece 15% por la tendencia de bienestar.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.0,"segmento":"fitness","ft":1.15}]},"mochilas":{"id":"mochilas","nombre":"Mochilas escolares y urbanas","categoria":"Retail estacional","unidad":"mochila","declarado":170000.0,"contexto":"Tomas la dirección comercial de una fábrica nacional de mochilas. El mercado se concentra en la campaña escolar y está partido en dos mundos que casi no se tocan: familias que compran por precio en mercados y mayoristas, y compradores urbanos que pagan tres veces más por diseño o durabilidad. Andes Gear ya es fuerte en la parte alta. Tienes ocho periodos y S/ 700,000 de caja.","leccion":"Aquí la aritmética manda: los dos segmentos de precio suman más de cuatro veces el volumen de los dos segmentos premium, y el costo unitario baja con el volumen. Una estrategia de penetración (precio bajo, línea amplia, mayoristas y radio) genera varias veces la utilidad de una estrategia premium bien ejecutada. El error caro es copiar el manual de la marca premium en un mercado cuyo peso está abajo.","costoBase":16.0,"costoFijo":150000.0,"cajaInicial":700000.0,"limiteSobregiro":350000.0,"periodos":8,"referencia":8100000.0,"segmentos":[{"id":"publico","nombre":"Padres de colegio público","descripcion":"Compra una mochila al año, en campaña, con presupuesto cerrado. Decide en el mercado o en la bodega del barrio, comparando precio y tamaño.","tamano":75000,"precioRef":46.0,"sensibilidad":5.2,"pesoCalidad":0.2,"pesoBeneficio":0.26,"pesoMarca":0.14,"pesoVariedad":0.4,"beneficio":"precio","exigencia":2.3,"lealtad":0.25,"sospecha":0.0,"medios":{"tv":0.4,"radio":0.5,"digital":0.15,"influencers":0.05,"punto_venta":0.4},"canales":{"bodegas":0.55,"mayorista":0.62,"retail":0.28,"marketplace":0.1,"propio":0.03}},{"id":"provincia","nombre":"Familia de provincia","descripcion":"Compra a través de comercios abastecidos por mayoristas. Escucha radio local. El precio manda y la marca casi no existe.","tamano":60000,"precioRef":39.0,"sensibilidad":5.6,"pesoCalidad":0.22,"pesoBeneficio":0.28,"pesoMarca":0.12,"pesoVariedad":0.38,"beneficio":"precio","exigencia":2.2,"lealtad":0.3,"sospecha":0.0,"medios":{"tv":0.3,"radio":0.6,"digital":0.1,"influencers":0.03,"punto_venta":0.3},"canales":{"mayorista":0.68,"bodegas":0.45,"retail":0.15,"marketplace":0.08,"propio":0.02}},{"id":"privado","nombre":"Padres de colegio privado","descripcion":"Le preocupa la espalda de su hijo y la duración del producto. Busca información antes de comprar y no le molesta pagar más si el argumento es creíble.","tamano":17600,"precioRef":125.0,"sensibilidad":1.6,"pesoCalidad":0.46,"pesoBeneficio":0.28,"pesoMarca":0.18,"pesoVariedad":0.08,"beneficio":"salud","exigencia":4.2,"lealtad":0.5,"sospecha":1.8,"medios":{"tv":0.15,"radio":0.1,"digital":0.5,"influencers":0.3,"punto_venta":0.3},"canales":{"retail":0.55,"marketplace":0.45,"propio":0.35,"bodegas":0.1,"mayorista":0.05}},{"id":"universitario","nombre":"Universitario urbano","descripcion":"Compra para sí mismo. El diseño y lo que la mochila dice de él pesan más que la durabilidad. Descubre y compra en línea.","tamano":14400,"precioRef":150.0,"sensibilidad":1.4,"pesoCalidad":0.24,"pesoBeneficio":0.24,"pesoMarca":0.44,"pesoVariedad":0.08,"beneficio":"estatus","exigencia":3.8,"lealtad":0.42,"sospecha":2.4,"medios":{"tv":0.08,"radio":0.04,"digital":0.58,"influencers":0.68,"punto_venta":0.1},"canales":{"marketplace":0.55,"propio":0.45,"retail":0.4,"bodegas":0.12,"mayorista":0.03}}],"competidores":[{"id":"andes","nombre":"Andes Gear","politica":"premium","d":{"precio":138.0,"calidad":4.3,"promesa":"salud","nivel":4.5,"real":"salud","amplitud":2,"canales":["retail","marketplace","propio"],"medios":{"digital":38000,"influencers":26000,"punto_venta":10000}},"estado":{"aw":{"publico":0.38,"provincia":0.38,"privado":0.38,"universitario":0.38},"rep":0.62,"cla":0.75}},{"id":"kuma","nombre":"Kuma","politica":"retador","d":{"precio":52.0,"calidad":2.6,"promesa":"precio","nivel":2.5,"real":"precio","amplitud":2,"canales":["bodegas","retail"],"medios":{"tv":18000,"radio":16000,"punto_venta":10000}},"estado":{"aw":{"publico":0.24,"provincia":0.24,"privado":0.24,"universitario":0.24},"rep":0.5,"cla":0.45}}],"eventos":[{"periodo":1,"titulo":"Campaña escolar","descripcion":"La demanda de Padres de colegio público crece 25% por el inicio de clases.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.0,"segmento":"publico","ft":1.25},{"periodo":4,"titulo":"Kuma entra en guerra de precios","descripcion":"Kuma baja su precio 10% y sube 30% su presencia en radio y televisión.","competidor":"kuma","cp":0.9,"cm":1.3,"ck":0.0,"fc":1.0,"segmento":"","ft":1.0},{"periodo":6,"titulo":"Alza del flete internacional","descripcion":"El costo de importación sube 10% y golpea el costo unitario.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.1,"segmento":"","ft":1.0}]},"academia":{"id":"academia","nombre":"Academia preuniversitaria en línea","categoria":"Servicios educativos","unidad":"matrícula","declarado":50000.0,"contexto":"Lanzas una academia preuniversitaria en línea. Academia Alfa lleva años siendo la referencia entre los postulantes a tiempo completo y tiene el recuerdo de marca más alto del mercado. Éxito Online compite por precio. Quedan segmentos que nadie atiende bien. Ocho periodos, S/ 550,000 de caja inicial.","leccion":"El segmento obvio, el postulante a tiempo completo, ya tiene dueño: Alfa llega con más recuerdo de marca, más reputación y un posicionamiento nítido, y defiende su territorio apenas le quitas participación. El segmento que estudia mientras trabaja es más grande, está desatendido y valora algo que Alfa no ofrece. Además, esta partida muestra algo incómodo: reposicionar a mitad de camino cuesta credibilidad y casi nunca recupera la ventaja de haber elegido bien desde el principio.","costoBase":38.0,"costoFijo":160000.0,"cajaInicial":550000.0,"limiteSobregiro":300000.0,"periodos":8,"referencia":3100000.0,"segmentos":[{"id":"postulante","nombre":"Postulante a tiempo completo","descripcion":"Estudia todo el día para ingresar a una universidad específica. Compara resultados de ingreso antes de matricularse. Es el segmento más visible y el más disputado.","tamano":10500,"precioRef":185.0,"sensibilidad":2.2,"pesoCalidad":0.44,"pesoBeneficio":0.3,"pesoMarca":0.2,"pesoVariedad":0.06,"beneficio":"rendimiento","exigencia":4.4,"lealtad":0.6,"sospecha":2.0,"medios":{"tv":0.12,"radio":0.1,"digital":0.6,"influencers":0.35,"punto_venta":0.2},"canales":{"propio":0.6,"marketplace":0.35,"retail":0.2,"bodegas":0.05,"mayorista":0.02}},{"id":"trabajador","nombre":"Trabajador que estudia","descripcion":"Trabaja y estudia. Necesita clases grabadas, horarios flexibles y poder avanzar a su ritmo. No puede asistir a una hora fija.","tamano":14500,"precioRef":125.0,"sensibilidad":3.0,"pesoCalidad":0.28,"pesoBeneficio":0.42,"pesoMarca":0.18,"pesoVariedad":0.12,"beneficio":"flexibilidad","exigencia":3.3,"lealtad":0.48,"sospecha":0.6,"medios":{"tv":0.15,"radio":0.35,"digital":0.55,"influencers":0.2,"punto_venta":0.15},"canales":{"propio":0.55,"marketplace":0.4,"retail":0.12,"bodegas":0.05,"mayorista":0.02}},{"id":"escolar","nombre":"Escolar con padres que pagan","descripcion":"Todavía está en el colegio; los padres deciden y pagan. Pesa el prestigio de la institución y el acompañamiento.","tamano":7800,"precioRef":225.0,"sensibilidad":1.5,"pesoCalidad":0.34,"pesoBeneficio":0.24,"pesoMarca":0.36,"pesoVariedad":0.06,"beneficio":"estatus","exigencia":4.0,"lealtad":0.58,"sospecha":2.6,"medios":{"tv":0.3,"radio":0.15,"digital":0.45,"influencers":0.25,"punto_venta":0.25},"canales":{"propio":0.55,"retail":0.3,"marketplace":0.25,"bodegas":0.05,"mayorista":0.02}},{"id":"repitente","nombre":"Repitente con presupuesto corto","descripcion":"Ya postuló antes. Presupuesto ajustado, decide por precio y por la posibilidad de pagar en partes.","tamano":19000,"precioRef":72.0,"sensibilidad":5.0,"pesoCalidad":0.22,"pesoBeneficio":0.3,"pesoMarca":0.14,"pesoVariedad":0.34,"beneficio":"precio","exigencia":2.4,"lealtad":0.28,"sospecha":0.0,"medios":{"tv":0.25,"radio":0.45,"digital":0.4,"influencers":0.1,"punto_venta":0.2},"canales":{"propio":0.45,"marketplace":0.45,"bodegas":0.2,"retail":0.15,"mayorista":0.05}}],"competidores":[{"id":"alfa","nombre":"Academia Alfa","politica":"premium","d":{"precio":205.0,"calidad":4.2,"promesa":"rendimiento","nivel":4.4,"real":"rendimiento","amplitud":2,"canales":["propio","marketplace"],"medios":{"tv":14000,"digital":42000,"influencers":16000}},"estado":{"aw":{"postulante":0.45,"trabajador":0.45,"escolar":0.45,"repitente":0.45},"rep":0.65,"cla":0.78}},{"id":"exito","nombre":"Éxito Online","politica":"retador","d":{"precio":79.0,"calidad":2.5,"promesa":"precio","nivel":2.2,"real":"precio","amplitud":3,"canales":["propio","marketplace"],"medios":{"radio":12000,"digital":20000}},"estado":{"aw":{"postulante":0.28,"trabajador":0.28,"escolar":0.28,"repitente":0.28},"rep":0.48,"cla":0.5}}],"eventos":[{"periodo":3,"titulo":"Academia Alfa lanza una ofensiva","descripcion":"Alfa baja su precio 20%, mejora su servicio y triplica su inversión digital sobre el segmento de postulantes a tiempo completo.","competidor":"alfa","cp":0.8,"cm":3.0,"ck":0.3,"fc":1.0,"segmento":"","ft":1.0},{"periodo":5,"titulo":"Crece el estudio en paralelo al trabajo","descripcion":"El segmento Trabajador que estudia crece 20%.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.0,"segmento":"trabajador","ft":1.2},{"periodo":6,"titulo":"Sube el costo de la plataforma","descripcion":"El proveedor de video en vivo sube su tarifa 8%.","competidor":"","cp":1.0,"cm":1.0,"ck":0.0,"fc":1.08,"segmento":"","ft":1.0}]}};
+let J;
+function nuevaPartida(id){
+  const m=structuredClone(MERCADOS[id]);
+  J={
+    mercado:m,
+    d:{objetivo:m.segmentos[0].id,promesa:'precio',nivel:3,calidad:3,real:'precio',
+       amplitud:2,precio:Math.round(m.costoBase*3.2*100)/100,
+       canales:new Set(['propio']),
+       medios:Object.fromEntries(Object.keys(MEDIOS).map(k=>[k,0])),investigacion:0},
+    estado:{aw:Object.fromEntries(m.segmentos.map(s=>[s.id,0.04])),rep:0.5,cla:0.35,
+            satPrev:0.55,partPrev:{},acum:0,pos:''},
+    em:{factorCosto:1,factorTamano:{}},
+    comps:m.competidores.map(c=>({...c,d:{...c.d,canales:new Set(c.d.canales),medios:{...c.d.medios}},
+      estado:{aw:{...c.estado.aw},rep:c.estado.rep,cla:c.estado.cla,satPrev:0.55,partPrev:{},acum:0,pos:''}})),
+    caja:m.cajaInicial,periodo:0,historial:[],decisiones:[],hallazgos:[],
+    eventos:[],terminada:false,quiebra:false,
+  };
+  aplicarEventos();
+}
+function aplicarEventos(){
+  J.eventos=J.mercado.eventos.filter(e=>e.periodo===J.periodo);
+  J.eventos.forEach(e=>{
+    if(e.fc!==1) J.em.factorCosto*=e.fc;
+    if(e.segmento) J.em.factorTamano[e.segmento]=(J.em.factorTamano[e.segmento]??1)*e.ft;
+    if(e.competidor) J.comps.filter(c=>c.id===e.competidor).forEach(c=>{
+      for(const k in c.d.medios) c.d.medios[k]*=e.cm;
+      c.d.precio*=e.cp; c.d.calidad=Math.min(5,c.d.calidad+e.ck);
+    });
+  });
+}
+function cerrarPeriodo(){
+  const r=simular(J.mercado,J.em,J.d,J.estado,J.comps,J.caja);
+  J.historial.push(r);
+  J.decisiones.push({...J.d,canales:new Set(J.d.canales),medios:{...J.d.medios}});
+  J.caja=r.caja; J.periodo++; J.d.investigacion=0;
+  if(J.caja<-J.mercado.limiteSobregiro){J.quiebra=true;J.terminada=true;}
+  else if(J.periodo>=J.mercado.periodos) J.terminada=true;
+  else aplicarEventos();
+}
+
+/* ====================== EVALUACIÓN ===================================== */
+function evaluar(){
+  const h=J.historial,dec=J.decisiones,m=J.mercado;
+  const prom=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+  const focos=h.map((r,i)=>{const o=r.detalle.find(x=>x.seg===dec[i].objetivo);
+    return r.unidades>0&&o?o.unidades/r.unidades:0;});
+  let cambios=0; for(let i=1;i<dec.length;i++) if(dec[i].objetivo!==dec[i-1].objetivo) cambios++;
+  const estabilidad=1-cambios/Math.max(1,dec.length-1);
+  const viables=h.filter((r,i)=>{const o=r.detalle.find(x=>x.seg===dec[i].objetivo);
+    const estr=m.costoFijo+[...dec[i].canales].reduce((a,c)=>a+CANALES[c].fijo,0)
+      +Object.values(dec[i].medios).reduce((a,b)=>a+b,0);
+    return o&&o.ingreso>=estr*0.6;}).length;
+  const seg=lim(prom(focos)/0.6*100,0,100)*0.40+lim(estabilidad*100,0,100)*0.25
+    +lim(viables/Math.max(1,h.length)*100,0,100)*0.35;
+
+  const objFinal=dec.length?dec[dec.length-1].objetivo:J.d.objetivo;
+  const cubiertos=['perfil','precio','canales','medios'].filter(e=>conoce(e,objFinal)).length;
+  const gastoCom=h.reduce((a,r)=>a+r.gastoMedios+r.costoCanales,0);
+  const gastoInv=h.reduce((a,r)=>a+r.investigacion,0);
+  const prop=gastoCom>0?gastoInv/gastoCom:0;
+  const efic=prop<0.03?prop/0.03*0.6:prop<=0.20?1:Math.max(0,1-(prop-0.20)/0.30);
+  const inv=cubiertos/4*100*0.40+efic*100*0.30+50*0.30;
+
+  const utilidad=h.reduce((a,r)=>a+r.utilidad,0);
+  const estrategia=lim(utilidad/m.referencia,0,1)*100*0.45
+    +lim(prom(h.map(r=>r.participacion))/0.35*100,0,100)*0.25
+    +(J.quiebra?0:lim(h.filter(r=>r.ingresos>0&&(r.ingresos-r.costoVar)/r.ingresos>=0.2).length/Math.max(1,h.length)*100,0,100))*0.30;
+
+  const coh=prom(dec.map(x=>lim(1-Math.abs(x.nivel-x.calidad)/4-(x.real!==x.promesa?0.35:0),0,1)));
+  const pos=lim(coh*100,0,100)*0.40
+    +lim((prom(h.filter(r=>r.unidades>0).map(r=>r.sat))-0.30)/0.50*100,0,100)*0.35
+    +lim(J.estado.cla/0.90*100,0,100)*0.25;
+
+  return [
+    {id:'Segmentación',p:seg},{id:'Investigación de mercado',p:inv},
+    {id:'Estrategia comercial',p:estrategia},{id:'Posicionamiento',p:pos},
+  ];
+}
+
+/* ====================== INTERFAZ ======================================= */
+const $=s=>document.querySelector(s);
+const sol=v=>'S/ '+Math.round(v).toLocaleString('es-PE');
+const pct=(v,d=1)=>(v*100).toFixed(d)+'%';
+const compacto=v=>Math.abs(v)>=1e6?(v/1e6).toFixed(2)+' M':Math.abs(v)>=1e4?Math.round(v/1000)+' mil':Math.round(v).toLocaleString('es-PE');
+
+function pintarTodo(){
+  pintarCabecera(); pintarBriefing(); pintarSegmentos(); pintarCliente();
+  pintarProducto(); pintarPrecio(); pintarCampanas(); pintarAnalisis();
+  pintarResultado(); pintarCierre();
+}
+function pintarCabecera(){
+  $('#subtitulo').textContent=`${J.mercado.nombre} · periodo ${Math.min(J.periodo+1,J.mercado.periodos)} de ${J.mercado.periodos}`;
+  $('#puntos').innerHTML=Array.from({length:J.mercado.periodos},(_,i)=>
+    `<span class="punto ${i<J.periodo?'hecho':i===J.periodo&&!J.terminada?'ahora':''}"></span>`).join('');
+  $('#btnCerrar').disabled=J.terminada;
+  $('#btnCerrar').textContent=J.terminada?'Partida terminada':`Cerrar periodo ${J.periodo+1}`;
+}
+function pintarBriefing(){
+  $('#contexto').textContent=J.mercado.contexto;
+  $('#estadoBrief').textContent=`${sol(J.caja)} en caja`;
+  $('#eventos').innerHTML=J.eventos.map(e=>
+    `<div class="evento"><b>${e.titulo}</b>${e.descripcion}</div>`).join('');
+}
+function pintarSegmentos(){
+  const disponible=J.caja-gastoComprometido();
+  $('#estadoMercado').textContent=`${J.hallazgos.length} estudio(s) · ${sol(J.d.investigacion)}`;
+  const generales=['tamano','mystery'].map(id=>botonEstudio(id,'',disponible)).join('');
+  $('#panelSegmentos').innerHTML=
+    `<div class="campo"><span class="etiqueta">Estudios generales</span>
+      <div class="estudios">${generales}</div></div>`+
+    J.mercado.segmentos.map(s=>fichaSegmento(s,disponible)).join('');
+  document.querySelectorAll('[data-estudio]').forEach(b=>b.onclick=()=>{
+    const {estudio,seg}=b.dataset;
+    J.hallazgos.push(investigar(estudio,seg||''));
+    J.d.investigacion+=ESTUDIOS[estudio].costo;
+    pintarTodo();
+  });
+  document.querySelectorAll('[data-objetivo]').forEach(b=>b.onclick=()=>{
+    J.d.objetivo=b.dataset.objetivo; pintarTodo();
+  });
+}
+function botonEstudio(id,seg,disponible){
+  const E=ESTUDIOS[id], ya=conoce(id,seg);
+  return `<button class="estudio ${ya?'comprado':''}" data-estudio="${id}" data-seg="${seg}"
+    ${ya||disponible<E.costo?'disabled':''}>${ya?'✓ ':''}${E.n} · ${sol(E.costo)} ±${Math.round(E.err*100)}%</button>`;
+}
+function fichaSegmento(s,disponible){
+  const esObj=J.d.objetivo===s.id;
+  const t=hallazgo('tamano'),per=hallazgo('perfil',s.id),pre=hallazgo('precio',s.id);
+  const can=hallazgo('canales',s.id),med=hallazgo('medios',s.id);
+  const filas=[];
+  if(t) filas.push(dato('Tamaño estimado',compacto(t.datos['tamano:'+s.id])+' '+J.mercado.unidad+'s',0.20));
+  if(per){
+    filas.push(dato('Busca',BENEFICIOS[per.datos.beneficio],0));
+    filas.push(dato('Pesos',`cal ${Math.round(per.datos.pesoCalidad*100)} · ben ${Math.round(per.datos.pesoBeneficio*100)} · marca ${Math.round(per.datos.pesoMarca*100)} · var ${Math.round(per.datos.pesoVariedad*100)}`,0.16));
+    filas.push(dato('Exigencia',per.datos.exigencia.toFixed(1)+' de 5',0.16));
+  }
+  if(pre) filas.push(dato('Precio de referencia','S/ '+pre.datos.precioRef.toFixed(2),0.14));
+  if(can){
+    const l=Object.keys(CANALES).filter(c=>can.datos['canal:'+c]>=0.2)
+      .map(c=>`${CANALES[c].n} ${Math.round(can.datos['canal:'+c]*100)}%`).join(' · ');
+    filas.push(dato('Dónde compra',l||'sin canal relevante',0.18));
+  }
+  if(med){
+    const l=Object.keys(MEDIOS).filter(c=>med.datos['medio:'+c]>=0.25)
+      .map(c=>`${MEDIOS[c].n} ${Math.round(med.datos['medio:'+c]*100)}%`).join(' · ');
+    filas.push(dato('Qué consume',l||'sin medio destacado',0.18));
+  }
+  return `<div class="segmento ${esObj?'objetivo':''}">
+    <h3>${s.nombre} ${esObj?'<span class="marca-objetivo">OBJETIVO</span>':''}</h3>
+    <p>${s.descripcion}</p>
+    ${filas.length?`<div class="datos">${filas.join('')}</div>`:
+      '<p class="oculto">Sin datos numéricos: lo que decidas sobre este segmento será una suposición.</p>'}
+    <div class="estudios">
+      ${esObj?'':`<button class="opcion" data-objetivo="${s.id}">Fijar como objetivo</button>`}
+      ${['perfil','precio','canales','medios'].map(id=>botonEstudio(id,s.id,disponible)).join('')}
+    </div></div>`;
+}
+const dato=(b,v,err)=>`<div class="dato"><b>${b} ${err?`<span class="tol">±${Math.round(err*100)}%</span>`:''}</b><span>${v}</span></div>`;
+
+function pintarCliente(){
+  const obj=J.mercado.segmentos.find(s=>s.id===J.d.objetivo);
+  $('#estadoCliente').textContent=obj?obj.nombre:'sin objetivo';
+  $('#opBeneficio').innerHTML=Object.entries(BENEFICIOS).map(([k,v])=>
+    `<button class="opcion" data-ben="${k}" aria-pressed="${J.d.promesa===k}">${v}</button>`).join('');
+  document.querySelectorAll('[data-ben]').forEach(b=>b.onclick=()=>{J.d.promesa=b.dataset.ben;pintarTodo();});
+  $('#rNivel').value=J.d.nivel; $('#vNivel').textContent=J.d.nivel.toFixed(1)+' / 5';
+  $('#txtNivel').textContent=J.d.nivel<=2
+    ?'Promesa básica: baja la expectativa, y por lo tanto es fácil de satisfacer.'
+    :J.d.nivel<=3.5?'Promesa intermedia: una marca correcta, sin un argumento que la distinga.'
+    :'Promesa premium: genera mucha expectativa. Si el producto no la sostiene, la satisfacción cae.';
+  const per=hallazgo('perfil',J.d.objetivo);
+  $('#avisoPromesa').innerHTML= !per
+    ? `<div class="aviso">No investigaste el perfil de este segmento: no hay forma de saber si tu promesa es la que busca.</div>`
+    : per.datos.beneficio===J.d.promesa
+      ? `<div class="aviso" style="border-left:3px solid var(--verde)"><b>Coincide.</b> ${obj.nombre} busca ${BENEFICIOS[per.datos.beneficio].toLowerCase()}: ese es el punto de partida de un buen posicionamiento.</div>`
+      : `<div class="aviso" style="border-left:3px solid var(--rojo)"><b>No coincide.</b> ${obj.nombre} busca ${BENEFICIOS[per.datos.beneficio].toLowerCase()} y tú prometes ${BENEFICIOS[J.d.promesa].toLowerCase()}.</div>`;
+}
+function pintarProducto(){
+  const cu=costoUnitario(J.mercado,J.em,J.d,J.estado.acum);
+  $('#estadoProducto').textContent=`costo S/ ${cu.toFixed(2)}`;
+  $('#rCalidad').value=J.d.calidad;
+  const brecha=J.d.nivel-J.d.calidad;
+  $('#vCalidad').innerHTML=`${J.d.calidad.toFixed(1)} / 5 <span style="font-size:12px;color:${brecha>=1?'var(--rojo)':brecha<=-1.2?'var(--ambar)':'var(--verde)'}">
+    (brecha con la promesa ${brecha>0?'+':''}${brecha.toFixed(1)})</span>`;
+  $('#opReal').innerHTML=Object.entries(BENEFICIOS).map(([k,v])=>
+    `<button class="opcion" data-real="${k}" aria-pressed="${J.d.real===k}">${v}${J.d.promesa===k?' ·prometido':''}</button>`).join('');
+  document.querySelectorAll('[data-real]').forEach(b=>b.onclick=()=>{J.d.real=b.dataset.real;pintarTodo();});
+  $('#opAmplitud').innerHTML=[1,2,3].map(n=>
+    `<button class="opcion" data-amp="${n}" aria-pressed="${J.d.amplitud===n}">${n} presentación${n>1?'es':''}</button>`).join('');
+  document.querySelectorAll('[data-amp]').forEach(b=>b.onclick=()=>{J.d.amplitud=+b.dataset.amp;pintarTodo();});
+}
+function pintarPrecio(){
+  const obj=J.mercado.segmentos.find(s=>s.id===J.d.objetivo);
+  const cu=costoUnitario(J.mercado,J.em,J.d,J.estado.acum);
+  const margen=obj?margenCanal(obj,J.d.canales):0;
+  const contrib=J.d.precio*(1-margen)-cu;
+  const fijos=J.mercado.costoFijo+[...J.d.canales].reduce((a,c)=>a+CANALES[c].fijo,0)
+    +Object.values(J.d.medios).reduce((a,b)=>a+b,0)+J.d.investigacion;
+  const eq=contrib>0?fijos/contrib:Infinity;
+  const max=Math.max(2,cu*8);
+  const r=$('#rPrecio'); r.max=max.toFixed(1); r.step=(max/400).toFixed(3); r.value=J.d.precio;
+  $('#vPrecio').textContent='S/ '+J.d.precio.toFixed(2);
+  $('#estadoPrecio').textContent=contrib>0?`contribución S/ ${contrib.toFixed(2)}`:'contribución negativa';
+  const pre=hallazgo('precio',J.d.objetivo);
+  const rel=pre?J.d.precio/pre.datos.precioRef:null;
+  $('#tablaPrecio').innerHTML=`
+    <tr><th>Lectura</th><th>Valor</th></tr>
+    <tr><td>Costo unitario</td><td class="n">S/ ${cu.toFixed(2)}</td></tr>
+    <tr><td>Margen que retiene el canal</td><td class="n">${pct(margen,0)}</td></tr>
+    <tr><td>Contribución por unidad</td><td class="n" style="color:${contrib>0?'var(--verde)':'var(--rojo)'}">S/ ${contrib.toFixed(2)}</td></tr>
+    <tr><td>Punto de equilibrio</td><td class="n">${eq===Infinity?'inalcanzable':compacto(eq)+' '+J.mercado.unidad+'s'}</td></tr>
+    <tr><td>Contra la referencia del objetivo</td><td class="n">${rel?pct(rel,0)+' <span class="tol">±14%</span>':'sin investigar'}</td></tr>`;
+}
+function pintarCampanas(){
+  const gasto=Object.values(J.d.medios).reduce((a,b)=>a+b,0);
+  $('#estadoCampanas').textContent=`${sol(gasto)} · ${J.d.canales.size} canal(es)`;
+  const obj=J.mercado.segmentos.find(s=>s.id===J.d.objetivo);
+  const med=hallazgo('medios',J.d.objetivo), can=hallazgo('canales',J.d.objetivo);
+  const tope=Math.max(60000,Math.round(J.caja*0.3/1000)*1000);
+  $('#medios').innerHTML=Object.entries(MEDIOS).map(([k,M])=>{
+    const v=J.d.medios[k]??0;
+    const af=med?med.datos['medio:'+k]:null;
+    const bajo=v>0&&v<M.min;
+    return `<div class="campo" style="margin-bottom:10px">
+      <div class="fila"><span style="font-size:13.5px;font-weight:600">${M.n}</span>
+        <span class="valor">${sol(v)}</span></div>
+      <input type="range" data-medio="${k}" min="0" max="${tope}" step="1000" value="${v}">
+      <div style="font-size:11.5px;font-family:var(--dato);color:var(--tinta-2)">
+        mínimo útil ${sol(M.min)}${bajo?' · <span style="color:var(--ambar)">por debajo del mínimo</span>':''}
+        · afinidad ${af===null?'<span style="color:var(--ambar)">sin investigar</span>'
+          :`<span style="color:${af<0.15?'var(--rojo)':'var(--verde)'}">${Math.round(af*100)}%</span>`}
+      </div></div>`;}).join('');
+  document.querySelectorAll('[data-medio]').forEach(r=>r.oninput=()=>{
+    J.d.medios[r.dataset.medio]=+r.value; pintarTodo();});
+  $('#opCanales').innerHTML=Object.entries(CANALES).map(([k,C])=>{
+    const act=J.d.canales.has(k);
+    const cob=can?can.datos['canal:'+k]:null;
+    return `<button class="opcion canal" data-canal="${k}" aria-pressed="${act}">
+      ${act?'✓ ':''}${C.n}
+      <small>${sol(C.fijo)}/periodo · margen ${Math.round(C.margen*100)}% ·
+      ${cob===null?'cobertura sin investigar':`llega al ${Math.round(cob*100)}% del objetivo`}</small>
+    </button>`;}).join('');
+  document.querySelectorAll('[data-canal]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.canal;
+    J.d.canales.has(k)?J.d.canales.delete(k):J.d.canales.add(k);
+    pintarTodo();});
+}
+function gastoComprometido(){
+  return Object.values(J.d.medios).reduce((a,b)=>a+b,0)
+    +[...J.d.canales].reduce((a,c)=>a+CANALES[c].fijo,0)+J.d.investigacion;
+}
+function pintarAnalisis(){
+  const proy=proyectar();
+  const u=J.historial.length?J.historial[J.historial.length-1]:null;
+  $('#kpis').innerHTML=[
+    ['Ventas',u?compacto(u.unidades):'—',u?J.mercado.unidad+'s':'sin cerrar'],
+    ['Participación',u?pct(u.participacion):'—',''],
+    ['Satisfacción',u?pct(u.sat,0):'—',u?(u.sat<0.45?'boca a boca negativo':'')  :''],
+    ['Caja',compacto(J.caja),`comprometido ${compacto(gastoComprometido())}`],
+  ].map(([b,v,s])=>`<div class="kpi"><b>${b}</b><div class="v ${b==='Caja'&&J.caja<0?'mal':''}">${v}</div><small>${s}</small></div>`).join('');
+
+  $('#proyeccion').innerHTML=`
+    <div class="kpis" style="border:1px solid var(--linea);border-radius:8px;overflow:hidden">
+      <div class="kpi"><b>Proyección ventas</b><div class="v">${compacto(proy.r.unidades)}</div></div>
+      <div class="kpi"><b>Participación</b><div class="v">${pct(proy.r.participacion)}</div></div>
+      <div class="kpi"><b>Utilidad</b><div class="v ${proy.r.utilidad<0?'mal':'bien'}">${compacto(proy.r.utilidad)}</div></div>
+      <div class="kpi"><b>Satisfacción</b><div class="v">${pct(proy.r.sat,0)}</div></div>
+    </div>
+    ${proy.supuestos.length?`<div class="aviso" style="margin-top:10px">
+      <b>${proy.supuestos.length} supuesto(s) sin verificar:</b><br>${proy.supuestos.slice(0,4).map(s=>'· '+s).join('<br>')}
+      ${proy.supuestos.length>4?`<br>· y ${proy.supuestos.length-4} más`:''}</div>`:
+      `<div class="aviso" style="margin-top:10px;border-left:3px solid var(--verde)">
+      Proyección respaldada por estudios en todos los segmentos.</div>`}`;
+
+  const c=analizar(proy);
+  $('#consejos').innerHTML=c.length?c.map(x=>`
+    <div class="consejo ${x.sev}">
+      <div class="sello">${x.sev.toUpperCase()} · ${x.regla}</div>
+      <h4>${x.titulo}</h4><p>${x.mensaje}</p>
+      <p class="porque">${x.porque}</p>
+    </div>`).join(''):'<p class="oculto">Sin observaciones con la información disponible.</p>';
+}
+function pintarResultado(){
+  const u=J.historial.length?J.historial[J.historial.length-1]:null;
+  $('#estadoResultado').textContent=u?`periodo ${J.historial.length}`:'todavía ninguno';
+  if(!u){$('#resultado').innerHTML='<p class="oculto">Cierra el primer periodo para ver ventas, satisfacción y participación por segmento.</p>';return;}
+  const filas=u.detalle.map(x=>{
+    const s=J.mercado.segmentos.find(y=>y.id===x.seg);
+    const esObj=J.decisiones[J.decisiones.length-1].objetivo===x.seg;
+    return `<tr><td>${s.nombre}${esObj?' <span class="marca-objetivo">obj</span>':''}
+      <div class="barrita"><i class="${esObj?'obj':''}" style="width:${(u.unidades>0?x.unidades/u.unidades*100:0).toFixed(1)}%"></i></div></td>
+      <td class="n">${compacto(x.unidades)}</td><td class="n">${pct(x.part,1)}</td>
+      <td class="n">${pct(x.sat,0)}</td><td class="n">${pct(x.aw,0)}</td></tr>`;}).join('');
+  $('#resultado').innerHTML=`
+    <div class="envoltura-tabla"><table>
+      <tr><th>Segmento</th><th>Unidades</th><th>Part. seg.</th><th>Satisf.</th><th>Recuerdo</th></tr>
+      ${filas}</table></div>
+    <div class="envoltura-tabla" style="margin-top:14px"><table>
+      <tr><th>Estado de resultados</th><th>Soles</th></tr>
+      <tr><td>Ingreso neto de canal</td><td class="n">${sol(u.ingresos)}</td></tr>
+      <tr><td>Costo de producción</td><td class="n">−${sol(u.costoVar)}</td></tr>
+      <tr><td>Costo fijo de operación</td><td class="n">−${sol(u.costoFijo)}</td></tr>
+      <tr><td>Costo fijo de canales</td><td class="n">−${sol(u.costoCanales)}</td></tr>
+      <tr><td>Inversión en medios</td><td class="n">−${sol(u.gastoMedios)}</td></tr>
+      <tr><td>Investigación</td><td class="n">−${sol(u.investigacion)}</td></tr>
+      <tr><td>Impuesto</td><td class="n">−${sol(u.impuesto)}</td></tr>
+      <tr class="total"><td>Utilidad del periodo</td><td class="n" style="color:${u.utilidad<0?'var(--rojo)':'var(--verde)'}">${sol(u.utilidad)}</td></tr>
+    </table></div>`;
+}
+function pintarCierre(){
+  const b=$('#bloqueCierre');
+  if(!J.terminada){b.hidden=true;return;}
+  b.hidden=false;
+  const notas=evaluar();
+  const global=notas.reduce((a,n)=>a+n.p*0.25,0);
+  $('#cierre').innerHTML=`
+    <div class="fila"><div><h3 style="font-size:17px">Tu desempeño</h3>
+      <span style="font-size:13px;color:var(--tinta-2)">${J.quiebra?'La partida terminó en quiebra técnica.':`${J.historial.length} periodos · utilidad acumulada ${sol(J.historial.reduce((a,r)=>a+r.utilidad,0))}`}</span></div>
+      <div class="puntaje" style="font-size:30px">${Math.round(global)}</div></div>
+    ${notas.map(n=>`<div class="competencia">
+      <div class="fila"><span style="font-size:13.5px;font-weight:600">${n.id}</span>
+        <span class="puntaje">${Math.round(n.p)}</span></div>
+      <div class="barrita"><i style="width:${n.p.toFixed(0)}%;background:${n.p>=70?'var(--verde)':n.p>=50?'var(--ambar)':'var(--rojo)'}"></i></div>
+    </div>`).join('')}
+    <div class="aviso" style="border-left:3px solid var(--naranja)">
+      <b>Lo que este escenario quería enseñar.</b><br>${J.mercado.leccion}</div>`;
+}
+
+/* ====================== ARRANQUE ======================================= */
+$('#selMercado').innerHTML=Object.values(MERCADOS).map(m=>
+  `<option value="${m.id}">${m.nombre}</option>`).join('');
+$('#selMercado').onchange=e=>{nuevaPartida(e.target.value);pintarTodo();};
+$('#btnReiniciar').onclick=()=>{nuevaPartida($('#selMercado').value);pintarTodo();};
+$('#btnCerrar').onclick=()=>{cerrarPeriodo();pintarTodo();window.scrollTo({top:0,behavior:'smooth'});};
+$('#rNivel').oninput=e=>{J.d.nivel=+e.target.value;pintarTodo();};
+$('#rCalidad').oninput=e=>{J.d.calidad=+e.target.value;pintarTodo();};
+$('#rPrecio').oninput=e=>{J.d.precio=Math.round(+e.target.value*100)/100;pintarTodo();};
+
+nuevaPartida('bebida');
+pintarTodo();
+</script>
