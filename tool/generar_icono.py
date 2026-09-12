@@ -4,9 +4,9 @@
 
 Se dibuja con la biblioteca estandar (zlib + struct escriben el PNG a mano)
 para que el icono se pueda regenerar en cualquier maquina y en CI sin instalar
-nada. El icono no es decorativo: son tres barras de participacion de mercado
-con un punto naranja sobre la barra elegida, que es exactamente lo que la
-aplicacion ensena — elegir un segmento y concentrar el esfuerzo en el.
+nada. El icono es una mira de precision (dianas concentricas + retícula) con
+el centro naranja: apuntar con precision a un segmento de mercado, en vez de
+disparar a todos, es exactamente la estrategia que la aplicacion ensena.
 
 Uso:
     python3 tool/generar_icono.py [carpeta_destino_android]
@@ -17,8 +17,8 @@ import sys
 import zlib
 
 FONDO = (15, 76, 92)        # Tema.primario
-BARRA = (255, 255, 255)
-BARRA_TENUE = (120, 170, 180)
+ANILLO_TENUE = (120, 170, 180)
+BLANCO = (255, 255, 255)
 ACENTO = (227, 100, 20)     # Tema.acento
 
 TAMANOS_ANDROID = {
@@ -74,39 +74,36 @@ def dibujar(lado):
             if dentro_redondeado(x + 0.5, y + 0.5):
                 px[y * lado + x] = FONDO + (255,)
 
-    # Tres barras: la del medio es la elegida.
-    ancho_barra = lado * 0.15
-    separacion = lado * 0.075
-    base = lado * 0.76
-    alturas = [lado * 0.20, lado * 0.38, lado * 0.28]
-    colores = [BARRA_TENUE, BARRA, BARRA_TENUE]
-    total = 3 * ancho_barra + 2 * separacion
-    inicio = (lado - total) / 2
+    cx, cy = lado / 2, lado / 2
+    radio_externo = lado * 0.34
+    radio_medio = radio_externo * 0.62
+    radio_interno = radio_externo * 0.30
+    grosor_retícula = max(1.0, lado * 0.02)
 
-    for i in range(3):
-        x0 = inicio + i * (ancho_barra + separacion)
-        x1 = x0 + ancho_barra
-        y0 = base - alturas[i]
-        for y in range(int(y0), int(base)):
-            for x in range(int(x0), int(x1)):
-                if 0 <= x < lado and 0 <= y < lado:
-                    px[y * lado + x] = colores[i] + (255,)
-
-    # Punto naranja sobre la barra elegida: el segmento objetivo.
-    cx = inicio + ancho_barra + separacion + ancho_barra / 2
-    cy = base - alturas[1] - lado * 0.11
-    r = lado * 0.075
     for y in range(lado):
         for x in range(lado):
-            if (x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r:
-                px[y * lado + x] = ACENTO + (255,)
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            dist2 = dx * dx + dy * dy
+            if dist2 <= radio_externo ** 2:
+                px[y * lado + x] = ANILLO_TENUE + (255,)
+            if dist2 <= radio_medio ** 2:
+                px[y * lado + x] = BLANCO + (255,)
 
-    # Linea de base.
-    y0 = int(base)
-    for y in range(y0, min(lado, y0 + max(2, int(lado * 0.018)))):
-        for x in range(int(inicio), int(inicio + total)):
-            if 0 <= x < lado:
-                px[y * lado + x] = BARRA + (255,)
+    # Retícula: cruz fina de mira, bajo el centro naranja.
+    for y in range(lado):
+        for x in range(lado):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            if dx * dx + dy * dy > radio_externo ** 2:
+                continue
+            if abs(dx) <= grosor_retícula / 2 or abs(dy) <= grosor_retícula / 2:
+                px[y * lado + x] = FONDO + (255,)
+
+    # Centro: el segmento de mercado elegido.
+    for y in range(lado):
+        for x in range(lado):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            if dx * dx + dy * dy <= radio_interno ** 2:
+                px[y * lado + x] = ACENTO + (255,)
 
     return px
 
